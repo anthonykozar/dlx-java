@@ -1,3 +1,5 @@
+import sys
+
 def str2polyomino(polystr, cellch = 'x', minimizecoords = True):
     a = []
     row = 0
