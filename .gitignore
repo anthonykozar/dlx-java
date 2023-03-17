@@ -1,3 +1,6 @@
 *.jar
 *.class
+*.pyc
+out*.txt
+test*.txt
 DLX/
