@@ -48,21 +48,20 @@ tetrominostr = '''
 trominos = [str2polyomino(trominostr, str(d)) for d in range(2)]
 tetrominos = [str2polyomino(tetrominostr, str(d)) for d in range(5)]
 
-def polydims(p):
-    def minmax(a, fieldfunc):
-        low = fieldfunc(a[0])
-        high = low
-        for e in a:
-            val = fieldfunc(e)
-            if val < low:
-                low = val
-            elif val > high:
-                high = val
-        return (low, high)
-    
+def minmax(a, fieldfunc):
+    low = fieldfunc(a[0])
+    high = low
+    for e in a:
+        val = fieldfunc(e)
+        if val < low:
+            low = val
+        elif val > high:
+            high = val
+    return (low, high)
+
+def polydims(p, minmax = minmax):
     col = lambda e: e[0]
     row = lambda e: e[1]
-    
     colmin, colmax = minmax(p, col)
     rowmin, rowmax = minmax(p, row)
     return (colmax - colmin + 1, rowmax - rowmin + 1)
@@ -70,8 +69,20 @@ def polydims(p):
 def polyshift(p, xoffset, yoffset):
     return [(x+xoffset, y+yoffset) for (x,y) in p]
 
+# rotate p 90 degrees clockwise
+def polyrotate90(p, minmax = minmax):
+    row = lambda e: e[1]
+    rowmin, rowmax = minmax(p, row)
+    xoffset = rowmax + rowmin
+    return [(xoffset-y, x) for (x,y) in p]
+
+# reflect p in the XY diagonal (y=x)
+def polyreflectXY(p):
+    return [(y,x) for (x,y) in p]
+
 def polyprint(p, gridwidth = None, gridheight = None, out = sys.stdout, polydims = polydims):
-    cols, rows = polydims(p)
+    cols = max(map(lambda e: e[0], p)) + 1
+    rows = max(map(lambda e: e[1], p)) + 1
     if not gridheight:
         gridheight = rows
     if not gridwidth:
