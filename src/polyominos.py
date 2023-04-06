@@ -45,8 +45,54 @@ tetrominostr = '''
 ...44
 '''
 
+pentominostr = '''
+IIIII
+
+LLLL
+L...
+
+YYYY
+.Y..
+
+PPP
+PP.
+
+UUU
+U.U
+
+VVV
+V..
+V..
+
+T..
+TTT
+T..
+
+F..
+FFF
+.F.
+
+Z..
+ZZZ
+..Z
+
+.X.
+XXX
+.X.
+
+W..
+WW.
+.WW
+
+N..
+NN.
+.N.
+.N.
+'''
+
 trominos = [str2polyomino(trominostr, str(d)) for d in range(2)]
 tetrominos = [str2polyomino(tetrominostr, str(d)) for d in range(5)]
+pentominoes = {c:str2polyomino(pentominostr, c) for c in "ILYPUVTFZXWN"}
 
 def minmax(a, fieldfunc):
     low = fieldfunc(a[0])
