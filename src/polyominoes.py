@@ -90,8 +90,8 @@ NN.
 .N.
 '''
 
-trominos = [str2polyomino(trominostr, str(d)) for d in range(2)]
-tetrominos = [str2polyomino(tetrominostr, str(d)) for d in range(5)]
+trominoes = [str2polyomino(trominostr, str(d)) for d in range(2)]
+tetrominoes = [str2polyomino(tetrominostr, str(d)) for d in range(5)]
 pentominoes = {c:str2polyomino(pentominostr, c) for c in "ILYPUVTFZXWN"}
 
 def minmax(a, fieldfunc):

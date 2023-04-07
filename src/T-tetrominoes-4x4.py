@@ -2,7 +2,7 @@
 # describes the problem of how to find all 
 # ways to tile a 4x4 grid with T tetrominoes.
 
-from polyominos import *
+from polyominoes import *
 
 fout = open('T-tetrominoes-4x4.txt', 'w')
 if fout:
@@ -14,7 +14,7 @@ if fout:
             fout.write('(%d,%d) ' % (row, col))
     fout.write('\n')
     # write one row for each orientation and position of a T tetromino
-    b = tetrominos[2]
+    b = tetrominoes[2]
     for i in range(4):
         printallmatrixrows(b, 4, 4, out = fout)
         b = polyrotate90(b)

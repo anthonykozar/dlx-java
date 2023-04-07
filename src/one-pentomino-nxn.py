@@ -4,7 +4,7 @@
 # pentomino.
 
 import argparse
-from polyominos import *
+from polyominoes import *
 
 parser = argparse.ArgumentParser(description = "Outputs DLX matrices for one or more tiling problems involving a single pentomino.")
 parser.add_argument("width", type=int)

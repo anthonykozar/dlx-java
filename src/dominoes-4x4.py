@@ -1,9 +1,9 @@
 # Write an input file for DLXMain that describes the problem 
 # of how to find all ways to tile a 4x4 grid with dominoes.
 
-from polyominos import *
+from polyominoes import *
 
-fout = open('dominos-4x4.txt', 'w')
+fout = open('dominoes-4x4.txt', 'w')
 if fout:
     # write the dimensions of the matrix
     fout.write('16 0 24\n') # 16 cols, 24 rows
