@@ -4,6 +4,7 @@
 # pentomino.
 
 import argparse
+import StringIO
 from polyominoes import *
 
 parser = argparse.ArgumentParser(description = "Outputs DLX matrices for one or more tiling problems involving a single pentomino.")
@@ -28,21 +29,28 @@ for name in names:
         filename = name + '-pentominoes-%dx%d.txt' % (gridwidth, gridheight)
         fout = open(filename, 'w')
     if fout:
+        # write the matrix rows to a temporary string buffer so that we can count them
+        sout = StringIO.StringIO()
+        # write one row for each orientation and position of the pentomino
+        b = pentominoes[name]
+        for side in range(2):
+            for rotation in range(4):
+                printallmatrixrows(b, gridwidth, gridheight, out = sout)
+                b = polyrotate90(b)
+            b = polyreflectXY(b)
+        lines = sout.getvalue().split('\n')
+        
         # write the dimensions of the matrix
         numcols = gridwidth * gridheight
-        numrows = 10
+        numrows = len(lines) - 1 
         fout.write('%d 0 %d\n' % (numcols, numrows))
         # use cell coords as the column headers
         for row in range(gridheight):
             for col in range(gridwidth):
                 fout.write('(%d,%d) ' % (row, col))
         fout.write('\n')
-        # write one row for each orientation and position of an L tetromino
-        b = pentominoes[name]
-        for side in range(2):
-            for rotation in range(4):
-                printallmatrixrows(b, gridwidth, gridheight, out = fout)
-                b = polyrotate90(b)
-            b = polyreflectXY(b)
+        # write the matrix rows to the output file
+        fout.write(sout.getvalue())
+        sout.close()
         if not args.stdout:
             fout.close()
