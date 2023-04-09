@@ -3,4 +3,5 @@
 *.pyc
 out*.txt
 test*.txt
-DLX/
+src/DLX/
+src/problems/
