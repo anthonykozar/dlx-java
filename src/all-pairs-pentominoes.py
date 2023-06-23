@@ -3,6 +3,7 @@
 # an NxN grid with those pentominoes.
 
 import argparse
+import StringIO
 from polyominoes import *
 
 parser = argparse.ArgumentParser(description = "Outputs DLX matrices for tiling problems involving pairs of pentominoes.")
@@ -31,23 +32,14 @@ for firstpent in names:
             filename = '%d%s-%d%s-%dx%d.dlx' % (firstcount, firstpent, secondcount, secondpent, gridwidth, gridheight)
             fout = open(filename, 'w')
         if fout:
-            # write the dimensions of the matrix
-            numcols = gridwidth * gridheight + secondcount
-            numrows = 1
-            fout.write('%d 0 %d\n' % (numcols, numrows))
-            # use cell coords as the column headers
-            for row in range(gridheight):
-                for col in range(gridwidth):
-                    fout.write('(%d,%d) ' % (row, col))
-            # use the name of the second pentomino as the header for its extra columns
-            fout.write((secondpent + ' ') * secondcount)
-            fout.write('\n')
+           # write the matrix rows to a temporary string buffer so that we can count them
+            sout = StringIO.StringIO()
             # write one row for each orientation and position of the first pentomino
             b = pentominoes[firstpent]
             post = [0] * secondcount
             for side in range(2):
                 for rotation in range(4):
-                    printallmatrixrows(b, gridwidth, gridheight, out = fout, postcols = post)
+                    printallmatrixrows(b, gridwidth, gridheight, out = sout, postcols = post)
                     b = polyrotate90(b)
                 b = polyreflectXY(b)
             # write secondcount rows for each orientation and position of the second pentomino, each with a unique column '1'
@@ -59,8 +51,24 @@ for firstpent in names:
                     for i in range(secondcount):
                         post = [0] * secondcount
                         post[i] = 1
-                        printallmatrixrows(b, gridwidth, gridheight, out = fout, postcols = post)
+                        printallmatrixrows(b, gridwidth, gridheight, out = sout, postcols = post)
                     b = polyrotate90(b)
                 b = polyreflectXY(b)
+            lines = sout.getvalue().split('\n')
+            
+            # write the dimensions of the matrix
+            numcols = gridwidth * gridheight + secondcount
+            numrows = len(lines) - 1
+            fout.write('%d 0 %d\n' % (numcols, numrows))
+            # use cell coords as the column headers
+            for row in range(gridheight):
+                for col in range(gridwidth):
+                    fout.write('(%d,%d) ' % (row, col))
+            # use the name of the second pentomino as the header for its extra columns
+            fout.write((secondpent + ' ') * secondcount)
+            fout.write('\n')
+            # write the matrix rows to the output file
+            fout.write(sout.getvalue())
+            sout.close()
             if not args.stdout:
                 fout.close()
